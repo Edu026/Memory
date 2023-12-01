@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:web_socket_channel/io.dart';
 
 // Access appData globaly with:
@@ -18,6 +19,7 @@ enum ConnectionStatus {
 class AppData with ChangeNotifier {
   String ip = "localhost";
   String port = "8888";
+  String username = "Player";
 
   IOWebSocketChannel? _socketClient;
   ConnectionStatus connectionStatus = ConnectionStatus.disconnected;
@@ -237,5 +239,50 @@ class AppData with ChangeNotifier {
       file_loading = false;
       notifyListeners();
     }
+  }
+
+  // Brand new code
+
+  List<List<List<Color>>> memoryBoard = List.generate(
+      4, (i) => List.generate(4, (j) => List.generate(2, (k) => Colors.black)));
+
+  bool areTheCellsSet = false;
+
+  void setUpCells() {
+    if (!areTheCellsSet) {
+      List<int> colorIndices = generateColors(8);
+      List<Color> colors = [
+        Colors.blueAccent,
+        Colors.green,
+        Colors.orange,
+        Colors.red,
+        Colors.deepPurple,
+        Colors.pinkAccent,
+        Colors.yellow,
+        Colors.brown
+      ];
+
+      int index = 0;
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          memoryBoard[i][j][1] = colors[colorIndices[index]];
+          index++;
+        }
+      }
+      areTheCellsSet = true;
+    }
+  }
+
+  List<int> generateColors(int numPairs) {
+    List<int> colors = [];
+    for (int i = 0; i < numPairs; i++) {
+      colors.addAll([i, i]);
+    }
+    colors.shuffle();
+    return colors;
+  }
+
+  void revealColor(int row, int col) {
+    memoryBoard[row][col][0] = Colors.white;
   }
 }

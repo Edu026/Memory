@@ -3,16 +3,7 @@ package com.project;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/*
-    Examples d'instruccions:
 
-    exit                > Exit the program
-    reconnect           > Reconnect to the server
-    list                > Get list of clients
-    to(6a2)message      > Send a private message to a client
-    broadcast message   > Send a message to everyone
-    
- */
 
 public class Main {
     public static void main(String[] args) {

@@ -17,17 +17,14 @@ class App extends StatefulWidget {
 // Main application state
 class AppState extends State<App> {
   // Definir el contingut del widget 'App'
-
   Widget _setLayout(BuildContext context) {
     AppData appData = Provider.of<AppData>(context);
 
     switch (appData.connectionStatus) {
-      case ConnectionStatus.disconnecting:
-        return const LayoutDisconnecting();
-      case ConnectionStatus.connecting:
-        return const LayoutConnecting();
       case ConnectionStatus.connected:
         return const LayoutConnected();
+      case ConnectionStatus.connecting:
+        return const LayoutConnecting();
       default:
         return const LayoutDisconnected();
     }
