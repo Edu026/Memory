@@ -7,16 +7,16 @@ import java.util.Random;
 
 import javafx.scene.paint.Color;
 
-public class Game {
+public class Board {
 
-    private String[][] cards; // Matrix of cards
+    static private String[][] cards; // Matrix of cards
     private Player[] players; // Array with players
     private int[][] flipedCards; // Array with the index of the cards taht are fliped
     private String id; // ID of the game
 
-    public Game(String id) {
+    public Board(String id) {
         this.id = id;
-        cards = createCartsMatrix();
+        
         players = new Player[2];
         flipedCards = new int[2][2];
         flipedCards[0][0] = -1;
@@ -91,37 +91,6 @@ public class Game {
         flipedCards[1][1] = -1;
     }
 
-    public String[][] createCartsMatrix() {
-        String[][] cards = new String[4][4];
-
-        String[] options = { "blue", "blue", "green", "green", "yellow", "yellow", "pink", "pink", "orange", "orange",
-                "red", "red", "brown", "brown", "purple", "purple" };
-
-        boolean stop;
-
-        Random rnd = new Random();
-
-        int colIndex = 0;
-        int rowIndex = 0;
-
-        for (String opt : options) {
-
-            stop = false;
-
-            while (!stop) {
-
-                colIndex = rnd.nextInt(4);
-                rowIndex = rnd.nextInt(4);
-
-                if (cards[rowIndex][colIndex] == null)
-                    cards[rowIndex][colIndex] = opt;
-
-            }
-
-        }
-
-        return cards;
-    }
      public static Color[][] createMemoryMatrix() {
         // Lista de colores básicos en formato hexadecimal
         String[] basicColors = {
@@ -146,6 +115,7 @@ public class Game {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Convertir la cadena hexadecimal del color a un objeto Color
+                cards[i][j]=allColors.get(colorIndex);
                 colorMatrix[i][j] = Color.web(allColors.get(colorIndex));
                 colorIndex++;
             }

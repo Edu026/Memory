@@ -33,7 +33,14 @@ public class ControllerGame {
         cardMatrix[2][0] = card20; cardMatrix[2][1] = card21; cardMatrix[2][2] = card22; cardMatrix[2][3] = card23;
         cardMatrix[3][0] = card30; cardMatrix[3][1] = card31; cardMatrix[3][2] = card32; cardMatrix[3][3] = card33;
 
-       
+        Color initialColor = Color.GREY;
+
+        // Configurar las cartas en un estado inicial sin color
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+            cardMatrix[i][j].setFill(initialColor);
+        }
+    }
     }
     @FXML
     public void clicked(Rectangle card) {

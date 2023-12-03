@@ -1,3 +1,3 @@
 # Memory #
 # Alex Pozas #
-# Amorós Eduardo #
+# Eduardo Amorós #

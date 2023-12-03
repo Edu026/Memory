@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class Memory extends WebSocketServer {
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private ArrayList<Game> games;
+    private ArrayList<Board> games;
 
     public Memory(int port) {
         super(new InetSocketAddress(port));
@@ -86,14 +86,14 @@ public class Memory extends WebSocketServer {
                 while (!stop) {
                     stop = true;
                     id = rnd.nextInt(1000);
-                    for (Game g : games) {
+                    for (Board g : games) {
                         if (g.getId().equals(id.toString())) {
                             stop = false;
                         }
                     }
                 }
 
-                Game g = new Game(id.toString());
+                Board g = new Board(id.toString());
                 Player p = new Player(clientId);
 
                 p.setTurn();
@@ -112,7 +112,7 @@ public class Memory extends WebSocketServer {
                 System.out.println("Game " + g.getId() + " created succesfully.");
 
             } 
-             if (type.equalsIgnoreCase("cart_info")) {
+             else if (type.equalsIgnoreCase("cart_info")) {
                     int row = objRequest.getInt("row");
                     int col = objRequest.getInt("col");
                     conn.send(objRequest.toString());
@@ -124,7 +124,7 @@ public class Memory extends WebSocketServer {
 
                 // Loock in the games list to found the game
                 // Check if the game exist and if its not complete
-                for (Game g : games) {
+                for (Board g : games) {
                     if (g.getId().equals(joinID) & g.getPlayersNumber() < 2) {
                         idExist = true;
                         // Add the second player to the game class
@@ -138,21 +138,8 @@ public class Memory extends WebSocketServer {
                     }
                 }
 
-                // If the gameId dosn't exist send a error missage to the client
-                if (!idExist) {
-                    JSONObject objCln = new JSONObject("{}");
-                    objCln.put("type", "gameCreated");
-                    objCln.put("value", "201");
-                    conn.send(objCln.toString());
 
-                    System.out.println("El usuario a mandado un ID erroneo o la sala estaba llena");
-                }
-
-            } else if (type.equalsIgnoreCase("markcard")) {
-
-            } else if (type.equalsIgnoreCase("flipcard")) {
-
-            }
+            } 
 
         } catch (Exception e) {
             e.printStackTrace();
