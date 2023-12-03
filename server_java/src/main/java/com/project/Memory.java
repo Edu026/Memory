@@ -52,6 +52,10 @@ public class Memory extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         System.err.println("Conectado");
+        
+
+       
+
         // Take the usrID
         String clientId = getConnectionId(conn);
 
@@ -101,10 +105,20 @@ public class Memory extends WebSocketServer {
                 objCln.put("type", "gameCreated");
                 objCln.put("gameID", g.getId());
                 conn.send(objCln.toString());
-
+                 JSONObject objma = new JSONObject("{}");
+                objma.put("type", "matriz");
+                objma.put("matriz",  g.createMemoryMatrix().toString());
+                conn.send(objma.toString());
                 System.out.println("Game " + g.getId() + " created succesfully.");
 
-            } else if (type.equalsIgnoreCase("joingame")) {
+            } 
+             if (type.equalsIgnoreCase("cart_info")) {
+                    int row = objRequest.getInt("row");
+                    int col = objRequest.getInt("col");
+                    conn.send(objRequest.toString());
+
+                }
+            else if (type.equalsIgnoreCase("joingame")) {
                 String joinID = objRequest.getString("gameID");
                 boolean idExist = false;
 

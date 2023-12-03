@@ -1,6 +1,11 @@
 package com.project;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+
+import javafx.scene.paint.Color;
 
 public class Game {
 
@@ -86,7 +91,7 @@ public class Game {
         flipedCards[1][1] = -1;
     }
 
-    private String[][] createCartsMatrix() {
+    public String[][] createCartsMatrix() {
         String[][] cards = new String[4][4];
 
         String[] options = { "blue", "blue", "green", "green", "yellow", "yellow", "pink", "pink", "orange", "orange",
@@ -117,4 +122,36 @@ public class Game {
 
         return cards;
     }
+     public static Color[][] createMemoryMatrix() {
+        // Lista de colores básicos en formato hexadecimal
+        String[] basicColors = {
+                "#FF0000", "#00FF00", "#0000FF", "#FFFF00",
+                "#FF00FF", "#FFA500", "#800080", "#008080"
+        };
+
+        // Duplicar los colores para tener pares en la matriz
+        List<String> allColors = new ArrayList<>();
+        for (String color : basicColors) {
+            allColors.add(color);
+        }
+        allColors.addAll(allColors);
+
+        // Barajar el array de colores para obtener un orden aleatorio
+        Collections.shuffle(allColors);
+
+        // Crear la matriz de colores
+        Color[][] colorMatrix = new Color[4][4];
+        int colorIndex = 0;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                // Convertir la cadena hexadecimal del color a un objeto Color
+                colorMatrix[i][j] = Color.web(allColors.get(colorIndex));
+                colorIndex++;
+            }
+        }
+
+        return colorMatrix;
+    }
+
 }
