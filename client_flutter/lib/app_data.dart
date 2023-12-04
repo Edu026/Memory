@@ -103,7 +103,7 @@ class AppData with ChangeNotifier {
                 "Private message from '${data['from']}': ${data['value']}\n";
             break;
           case 'turno':
-            turno = data['turno'];
+            turno = data['value'];
             flippedCards = 0;
             break;
           case 'enemyUser':
@@ -148,7 +148,7 @@ class AppData with ChangeNotifier {
     _socketClient!.sink.close();
   }
 
-  selectClient(int index) {
+/*   selectClient(int index) {
     if (selectedClientIndex != index) {
       selectedClientIndex = index;
       selectedClient = clients[index];
@@ -157,14 +157,14 @@ class AppData with ChangeNotifier {
       selectedClient = "";
     }
     notifyListeners();
-  }
+  } */
 
-  refreshClientsList() {
+/*   refreshClientsList() {
     final message = {
       'type': 'list',
     };
     _socketClient!.sink.add(jsonEncode(message));
-  }
+  } */
 
 /*   send(String msg) {
     if (selectedClientIndex == null) {
@@ -206,7 +206,7 @@ class AppData with ChangeNotifier {
 
   */
 
-  Future<void> saveFile(String fileName, Map<String, dynamic> data) async {
+/*   Future<void> saveFile(String fileName, Map<String, dynamic> data) async {
     file_saving = true;
     notifyListeners();
 
@@ -222,7 +222,7 @@ class AppData with ChangeNotifier {
       file_saving = false;
       notifyListeners();
     }
-  }
+  } */
 
   /*
   * Read file example:
@@ -230,7 +230,7 @@ class AppData with ChangeNotifier {
     final data = await readFile('myData.json');
 
   */
-
+/* 
   Future<Map<String, dynamic>?> readFile(String fileName) async {
     file_loading = true;
     notifyListeners();
@@ -255,7 +255,7 @@ class AppData with ChangeNotifier {
       file_loading = false;
       notifyListeners();
     }
-  }
+  } */
 
   // Brand new code
 
@@ -314,6 +314,7 @@ class AppData with ChangeNotifier {
             [pressedCards[lengthPressedCards - 1][1]][1] ==
         appData.memoryBoard[pressedCards[lengthPressedCards - 2][0]]
             [pressedCards[lengthPressedCards - 2][1]][1]) {
+      encert++;
       return true;
     } else {
       return false;
