@@ -37,7 +37,7 @@ class AppData with ChangeNotifier {
   bool file_saving = false;
   bool file_loading = false;
 
-  String turno = '';
+  String turno = 'Player ';
   String enEspera = "";
   int flippedCards = 0;
   List pressedCards = [];

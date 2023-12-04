@@ -59,10 +59,11 @@ class WidgetMemoryState extends State<WidgetMemory> {
             for (int i = 0; i < appData.pressedCards.length; i++) {
               // Code to execute for each element
               if (appData.pressedCards[i][0] != card[0] ||
-                  appData.pressedCards[i][1] != card[1])
+                  appData.pressedCards[i][1] != card[1]) {
                 pressed = false;
-              else
+              } else {
                 pressed = true;
+              }
             }
 
             if (pressed == false) {
