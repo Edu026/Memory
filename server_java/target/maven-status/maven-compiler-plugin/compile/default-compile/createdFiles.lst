@@ -1,5 +1,3 @@
+com\project\AppData.class
 com\project\Main.class
-com\project\Player.class
-com\project\Game.class
-com\project\Memory.class
-com\project\UtilsViews.class
+com\project\Server.class
