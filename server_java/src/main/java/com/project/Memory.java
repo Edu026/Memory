@@ -54,8 +54,6 @@ public class Memory extends WebSocketServer {
         System.err.println("Conectado");
         
 
-       
-
         // Take the usrID
         String clientId = getConnectionId(conn);
 
@@ -113,6 +111,7 @@ public class Memory extends WebSocketServer {
                 System.out.println("Game " + g.getId() + " created succesfully.");
 
             } 
+            
              else if (type.equalsIgnoreCase("cart_info")) {
                     int row = objRequest.getInt("row");
                     int col = objRequest.getInt("col");

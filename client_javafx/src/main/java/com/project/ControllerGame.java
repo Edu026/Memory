@@ -38,40 +38,49 @@ public class ControllerGame {
         // Configurar las cartas en un estado inicial sin color
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
+            int col = i;
+            int row = j;
+
             cardMatrix[i][j].setFill(initialColor);
+            cardMatrix[i][j].setOnMouseClicked(e -> clicked(cardMatrix[col][row]));
         }
     }
     }
+
     @FXML
     public void clicked(Rectangle card) {
+    if (firstSelectedCard == null) {
+        // Si no hay ninguna carta seleccionada, esta es la primera
+        firstSelectedCard = card;
+        card.setFill(cardsColors.get(card));
+        sendCardInfoToServer(firstSelectedCard);
+    } else if (secondSelectedCard == null && !card.equals(firstSelectedCard)) {
+        // Si es la segunda carta y no es la misma que la primera
+        secondSelectedCard = card;
+        card.setFill(cardsColors.get(card));
+        sendCardInfoToServer(secondSelectedCard);
+        // Verificar si las cartas coinciden
+        if (!cardsColors.get(firstSelectedCard).equals(cardsColors.get(secondSelectedCard))) {
+            // Si las cartas no coinciden, volver al cian después de un breve tiempo
+            resetCards();
+        } else {
+            // Si las cartas coinciden, enviar la información al servidor y dejarlas con el color
+            sendCardInfoToServer(firstSelectedCard);
+            sendCardInfoToServer(secondSelectedCard);
+            firstSelectedCard = null;
+            secondSelectedCard = null;
+        }
+    }
+
+    // Reproducir la animación fuera del bloque condicional
+    playRotateAnimation(card);
+    }
+    private void playRotateAnimation(Rectangle card) {
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
         rotateTransition.setByAngle(180); // Rotar 180 grados
         rotateTransition.setAxis(Rotate.Y_AXIS);
         rotateTransition.setAutoReverse(true);
-
-        if (firstSelectedCard == null) {
-            // Si no hay ninguna carta seleccionada, esta es la primera
-            firstSelectedCard = card;
-            card.setFill(cardsColors.get(card));
-            sendCardInfoToServer(firstSelectedCard);
-        } else if (secondSelectedCard == null && !card.equals(firstSelectedCard)) {
-            // Si es la segunda carta y no es la misma que la primera
-            secondSelectedCard = card;
-            card.setFill(cardsColors.get(card));
-            sendCardInfoToServer(secondSelectedCard);
-            // Verificar si las cartas coinciden
-            if (!cardsColors.get(firstSelectedCard).equals(cardsColors.get(secondSelectedCard))) {
-                // Si las cartas no coinciden, volver al cian después de un breve tiempo
-                resetCards();
-            } else {
-                // Si las cartas coinciden, enviar la información al servidor y dejarlas con el color
-                sendCardInfoToServer(firstSelectedCard);
-                sendCardInfoToServer(secondSelectedCard);
-                firstSelectedCard = null;
-                secondSelectedCard = null;
-            }
-        }
-
+    
         // Reproducir la animación
         rotateTransition.play();
     }
