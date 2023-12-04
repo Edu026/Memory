@@ -38,6 +38,7 @@ class AppData with ChangeNotifier {
   bool file_loading = false;
 
   String turno = '';
+  String enEspera = "";
   int flippedCards = 0;
   List pressedCards = [];
   String winner = '';
@@ -347,5 +348,13 @@ class AppData with ChangeNotifier {
       }
     }
     return '';
+  }
+
+  void whoIsWaiting() {
+    if (turno != username) {
+      enEspera = username;
+    } else {
+      enEspera = usernameRival;
+    }
   }
 }

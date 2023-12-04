@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:client_flutter/widget_memory_painter.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_data.dart';
 
@@ -15,6 +16,7 @@ class WidgetMemoryState extends State<WidgetMemory> {
   Widget build(BuildContext context) {
     AppData appData = Provider.of<AppData>(context);
     appData.setUpCells();
+    appData.enEspera;
 
     return GestureDetector(
       onTapUp: (TapUpDetails details) {
@@ -76,7 +78,7 @@ class WidgetMemoryState extends State<WidgetMemory> {
             print("Tapped outside valid cell range");
           }
         }
-        //  CAMBIO DE TURNO
+        // CAMBIO DE TURNO
         if (appData.flippedCards == 2) {
           // COMP COLORES
           Future.delayed(const Duration(seconds: 1), () {
@@ -90,15 +92,29 @@ class WidgetMemoryState extends State<WidgetMemory> {
           });
         }
       },
-      child: SizedBox(
-        width: MediaQuery.of(context)
-            .size
-            .width, // Ocupa tot l'ample de la pantalla
-        height: MediaQuery.of(context).size.height -
-            56.0, // Ocupa tota l'altura disponible menys l'altura de l'AppBar
-        child: CustomPaint(
-          painter: WidgetMemoryPainter(appData),
-        ),
+      child: Stack(
+        children: [
+          CustomPaint(
+            painter: WidgetMemoryPainter(appData),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 56.0,
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: Text("Torn de \"${appData.turno}\", ${appData.encert}",
+                style: TextStyle(fontSize: 20, color: Colors.black)),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Text(
+                "En espera: ${appData.enEspera}\", ${appData.encertsRival}",
+                style: TextStyle(fontSize: 20, color: Colors.black)),
+          ),
+        ],
       ),
     );
   }
