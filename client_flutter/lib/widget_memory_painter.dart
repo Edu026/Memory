@@ -10,8 +10,9 @@ class WidgetMemoryPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     drawBoard(canvas, size);
-    if (appData.winner.compareTo('') != 0) drawGameOver(canvas, size);
-  }
+    if (appData.winner.compareTo('') != 0) {
+      drawGameOver(canvas, size);}
+    }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
