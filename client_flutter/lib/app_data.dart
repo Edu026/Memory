@@ -113,6 +113,9 @@ class AppData with ChangeNotifier {
           case 'winner':
             winner = data['winer'];
             break;
+          case 'matriz':
+            print(data);
+            break;
           default:
             messages += "Message from '${data['from']}': ${data['value']}\n";
             break;

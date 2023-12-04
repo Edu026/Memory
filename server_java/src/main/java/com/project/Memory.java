@@ -104,10 +104,12 @@ public class Memory extends WebSocketServer {
                 objCln.put("type", "gameCreated");
                 objCln.put("gameID", g.getId());
                 conn.send(objCln.toString());
+
                  JSONObject objma = new JSONObject("{}");
                 objma.put("type", "matriz");
                 objma.put("matriz",  g.createMemoryMatrix().toString());
                 conn.send(objma.toString());
+                
                 System.out.println("Game " + g.getId() + " created succesfully.");
 
             } 

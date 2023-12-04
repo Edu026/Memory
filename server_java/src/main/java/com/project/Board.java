@@ -82,6 +82,7 @@ public class Board {
     }
 
     public void addPlayer(Player p, int index) {
+        
         players[index] = p;
     }
 
