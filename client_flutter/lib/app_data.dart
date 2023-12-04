@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,7 +20,10 @@ enum ConnectionStatus {
 class AppData with ChangeNotifier {
   String ip = "localhost";
   String port = "8888";
-  String username = "Player";
+  String username = 'Player';
+  int encert = 0;
+  String usernameRival = "";
+  int encertsRival = 0;
 
   IOWebSocketChannel? _socketClient;
   ConnectionStatus connectionStatus = ConnectionStatus.disconnected;
@@ -32,6 +36,11 @@ class AppData with ChangeNotifier {
 
   bool file_saving = false;
   bool file_loading = false;
+
+  String turno = '';
+  int flippedCards = 0;
+  List pressedCards = [];
+  String winner = '';
 
   AppData() {
     _getLocalIpAddress();
@@ -86,15 +95,22 @@ class AppData with ChangeNotifier {
             break;
           case 'disconnected':
             String removeId = data['id'];
-            if (selectedClient == removeId) {
-              selectedClient = "";
-            }
             clients.remove(data['id']);
             messages += "Disconnected client: ${data['id']}\n";
             break;
           case 'private':
             messages +=
                 "Private message from '${data['from']}': ${data['value']}\n";
+            break;
+          case 'turno':
+            turno = data['turno'];
+            flippedCards = 0;
+            break;
+          case 'enemyUser':
+            usernameRival = data['username'];
+            break;
+          case 'winner':
+            winner = data['winer'];
             break;
           default:
             messages += "Message from '${data['from']}': ${data['value']}\n";
@@ -150,17 +166,17 @@ class AppData with ChangeNotifier {
     _socketClient!.sink.add(jsonEncode(message));
   }
 
-  send(String msg) {
+/*   send(String msg) {
     if (selectedClientIndex == null) {
       broadcastMessage(msg);
     } else {
       privateMessage(msg);
     }
-  }
+  } */
 
-  broadcastMessage(String msg) {
+  broadcastMessage(String msg, String type) {
     final message = {
-      'type': 'broadcast',
+      'type': type,
       'value': msg,
     };
     _socketClient!.sink.add(jsonEncode(message));
@@ -284,5 +300,51 @@ class AppData with ChangeNotifier {
 
   void revealColor(int row, int col) {
     memoryBoard[row][col][0] = Colors.white;
+  }
+
+  bool compareCards(List pressedCards, AppData appData) {
+    int lengthPressedCards = appData.pressedCards.length;
+    print(appData.memoryBoard[pressedCards[lengthPressedCards - 1][0]]
+        [pressedCards[lengthPressedCards - 1][1]][1]);
+
+    print(appData.memoryBoard[pressedCards[lengthPressedCards - 2][0]]
+        [pressedCards[lengthPressedCards - 2][1]][1]);
+
+    if (appData.memoryBoard[pressedCards[lengthPressedCards - 1][0]]
+            [pressedCards[lengthPressedCards - 1][1]][1] ==
+        appData.memoryBoard[pressedCards[lengthPressedCards - 2][0]]
+            [pressedCards[lengthPressedCards - 2][1]][1]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void resetColor(bool notReset, List pressedCards, AppData appData) {
+    int lengthPressedCards = appData.pressedCards.length;
+    if (notReset == false) {
+      appData.memoryBoard[pressedCards[lengthPressedCards - 1][0]]
+          [pressedCards[lengthPressedCards - 1][1]][0] = Colors.black;
+      appData.memoryBoard[pressedCards[lengthPressedCards - 2][0]]
+          [pressedCards[lengthPressedCards - 2][1]][0] = Colors.black;
+    }
+    appData.pressedCards.remove(lengthPressedCards - 1);
+    appData.pressedCards.remove(lengthPressedCards - 2);
+  }
+
+  String checkWinner(List pressedCards) {
+    if (pressedCards.length == 16) {
+      if (encert > encertsRival) {
+        broadcastMessage(username, 'winner');
+        return username;
+      } else if (encert < encertsRival) {
+        broadcastMessage(usernameRival, 'winner');
+        return usernameRival;
+      } else if (encert == encertsRival) {
+        broadcastMessage('empate', 'winner');
+        return 'empate';
+      }
+    }
+    return '';
   }
 }

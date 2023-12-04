@@ -10,6 +10,7 @@ class WidgetMemoryPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     drawBoard(canvas, size);
+    if (appData.winner.compareTo('') != 0) drawGameOver(canvas, size);
   }
 
   @override
@@ -55,5 +56,48 @@ class WidgetMemoryPainter extends CustomPainter {
         canvas.drawRect(cellRect, paint);
       }
     }
+  }
+
+  // Dibuixa el missatge de joc acabat
+  void drawGameOver(Canvas canvas, Size size) {
+    String message = "El joc ha acabat. Has guanyat!";
+    if (appData.winner.compareTo(appData.username) != 0) {
+      if (appData.winner.compareTo('empate') == 0) {
+        message = "EMPATE!";
+      } else
+        message = "El joc ha acabat. Has perdut";
+    }
+
+    const textStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 24.0,
+      fontWeight: FontWeight.bold,
+    );
+
+    final textPainter = TextPainter(
+      text: TextSpan(text: message, style: textStyle),
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout(
+      maxWidth: size.width,
+    );
+
+    // Centrem el text en el canvas
+    final position = Offset(
+      (size.width - textPainter.width) / 2,
+      (size.height - textPainter.height) / 2,
+    );
+
+    // Dibuixar un rectangle semi-transparent que ocupi tot l'espai del canvas
+    final bgRect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.7) // Ajusta l'opacitat com vulguis
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRect(bgRect, paint);
+
+    // Ara, dibuixar el text
+    textPainter.paint(canvas, position);
   }
 }
