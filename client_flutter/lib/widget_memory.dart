@@ -54,24 +54,23 @@ class WidgetMemoryState extends State<WidgetMemory> {
             appData.revealColor(col, row);
 
             List card = [col, row];
-            bool pressed = false;
+            bool already_pressed = false;
 
             for (int i = 0; i < appData.pressedCards.length; i++) {
               // Code to execute for each element
               if (appData.pressedCards[i][0] != card[0] ||
                   appData.pressedCards[i][1] != card[1]) {
-                pressed = false;
+                already_pressed = false;
               } else {
-                pressed = true;
+                already_pressed = true;
               }
             }
 
-            if (pressed == false) {
+            if (already_pressed == false) {
               appData.pressedCards.add(card);
               appData.flippedCards++;
+              print("Card Flipped");
             }
-
-            setState(() {});
 
             // Add your logic for handling the tapped cell here
           } else {
@@ -85,13 +84,14 @@ class WidgetMemoryState extends State<WidgetMemory> {
           Future.delayed(const Duration(seconds: 1), () {
             appData.resetColor(
                 appData.compareCards(appData.pressedCards, appData),
-                appData.pressedCards,
-                appData);
+                appData.pressedCards,appData);
+                setState(() {});
 
             // COMP GANADOR
             appData.winner = appData.checkWinner(appData.pressedCards);
           });
         }
+        setState(() {});
       },
       child: Stack(
         children: [

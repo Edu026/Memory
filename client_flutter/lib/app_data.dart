@@ -37,7 +37,7 @@ class AppData with ChangeNotifier {
   bool file_saving = false;
   bool file_loading = false;
 
-  String turno = 'Player ';
+  String turno = 'Player';
   String enEspera = "";
   int flippedCards = 0;
   List pressedCards = [];
@@ -80,45 +80,7 @@ class AppData with ChangeNotifier {
         }
 
         switch (data['type']) {
-          case 'list':
-            clients = (data['list'] as List).map((e) => e.toString()).toList();
-            clients.remove(mySocketId);
-            messages += "List of clients: ${data['list']}\n";
-            break;
-          case 'id':
-            mySocketId = data['value'];
-            messages += "Id received: ${data['value']}\n";
-            break;
-          case 'connected':
-            clients.add(data['id']);
-            clients.remove(mySocketId);
-            messages += "Connected client: ${data['id']}\n";
-            break;
-          case 'disconnected':
-            String removeId = data['id'];
-            clients.remove(data['id']);
-            messages += "Disconnected client: ${data['id']}\n";
-            break;
-          case 'private':
-            messages +=
-                "Private message from '${data['from']}': ${data['value']}\n";
-            break;
-          case 'turno':
-            turno = data['value'];
-            flippedCards = 0;
-            break;
-          case 'enemyUser':
-            usernameRival = data['username'];
-            break;
-          case 'winner':
-            winner = data['winer'];
-            break;
-          case 'matriz':
-            print(data);
-            break;
-          default:
-            messages += "Message from '${data['from']}': ${data['value']}\n";
-            break;
+
         }
 
         notifyListeners();
