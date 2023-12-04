@@ -2,6 +2,7 @@ package com.project;
 
 public class Player {
     private String id;
+    private String name;
     private String enemyID;
     private int points;
     private boolean turn;
@@ -19,7 +20,12 @@ public class Player {
             turn = true;
         }
     }
-
+public void setName(String name) {
+        this.name = name;
+    }
+    public String getName(String name) {
+        return name;
+    }
     public void setEnemyID(String enemyID) {
         this.enemyID = enemyID;
     }

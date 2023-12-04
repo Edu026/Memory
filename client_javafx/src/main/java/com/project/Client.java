@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Client extends WebSocketClient {
     int idgame;
+    String name;
     
     public Client(URI serverUri) {
         super(serverUri);
@@ -21,14 +22,14 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        
         JSONObject objCln = new JSONObject("{}");
-                objCln.put("type", "joingame");
-                objCln.put("gameID", );
-                send(objCln.toString());
-
                 objCln.put("type", "creategame");
                 send(objCln.toString());
+        
+                objCln.put("type", "joingame");
+                send(objCln.toString());
+
+                
     }
 
     @Override
@@ -38,11 +39,6 @@ public class Client extends WebSocketClient {
         if ("matriz".equals(objma.getString("type"))) {
             JSONArray matrizArray = objma.getJSONArray("matriz");
             List<List<String>> colorMatrix = jsonArrayToMatrix(matrizArray);
-    
-            
-            // Luego, pasas la matriz de colores a la clase ControllerGame para actualizar las cartas
-             
-           
         
             controllerGame.updateMatrix(colorMatrix);
         }
@@ -108,6 +104,12 @@ public class Client extends WebSocketClient {
 
         // Enviar el JSON al servidor
         send(cardJson.toString());
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName(String name) {
+        return name;
     }
 
 

@@ -20,8 +20,8 @@ public class Main extends Application {
         final int windowHeight = 600;
         try {
             UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
+            UtilsViews.addView(getClass(), "login", "/assets/layoutDisconnected.fxml");
             UtilsViews.addView(getClass(), "Game", "/assets/layout_partida.fxml");
-            UtilsViews.addView(getClass(), "Game", "/assets/layoutDisconnected.fxml");
         } catch (Exception e) {e.printStackTrace();}
 
         Scene scene = new Scene(UtilsViews.parentContainer);

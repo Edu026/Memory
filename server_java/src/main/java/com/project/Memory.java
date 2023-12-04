@@ -95,7 +95,6 @@ public class Memory extends WebSocketServer {
 
                 Board g = new Board(id.toString());
                 Player p = new Player(clientId);
-
                 p.setTurn();
                 g.addPlayer(p, g.getPlayersNumber());
                 games.add(g);
@@ -118,17 +117,29 @@ public class Memory extends WebSocketServer {
                     conn.send(objRequest.toString());
 
                 }
-            else if (type.equalsIgnoreCase("joingame")) {
-                String joinID = objRequest.getString("gameID");
-                boolean idExist = false;
+                
+            else if (type.equalsIgnoreCase("fallo")) {
+                    String name = objRequest.getString("name");
+                   Player p = new Player(clientId);
+                   p.setTurn();
+                    conn.send(objRequest.toString());
 
-                // Loock in the games list to found the game
-                // Check if the game exist and if its not complete
+                }
+                 else if (type.equalsIgnoreCase("acierto")) {
+                    String name = objRequest.getString("name");
+                   Player p = new Player(clientId);
+                   p.sumPoints(1);
+                    
+
+                }
+            else if (type.equalsIgnoreCase("joingame")) {
+                boolean idExist = false;
                 for (Board g : games) {
-                    if (g.getId().equals(joinID) & g.getPlayersNumber() < 2) {
+                    if ( g.getPlayersNumber() < 2) {
                         idExist = true;
                         // Add the second player to the game class
                         g.addPlayer(new Player(clientId), g.getPlayersNumber());
+                        g.switchTurn();
 
                         // Complete the players info and send to him his game status
                         for (Player p : g.getPlayers()) {
@@ -137,8 +148,7 @@ public class Memory extends WebSocketServer {
                         }
                     }
                 }
-
-
+                
             } 
 
         } catch (Exception e) {

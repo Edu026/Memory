@@ -13,10 +13,10 @@ public class Board {
     private Player[] players; // Array with players
     private int[][] flipedCards; // Array with the index of the cards taht are fliped
     private String id; // ID of the game
-
+    private int currentPlayerIndex;
     public Board(String id) {
         this.id = id;
-        
+        currentPlayerIndex = 0; 
         players = new Player[2];
         flipedCards = new int[2][2];
         flipedCards[0][0] = -1;
@@ -25,13 +25,19 @@ public class Board {
         flipedCards[1][1] = -1;
 
     }
-
+   
     public String getId() {
         return id;
     }
 
     public Player[] getPlayers() {
         return players;
+    } 
+
+    
+
+    public void switchTurn() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     }
 
     // Get a single cards of the matrix

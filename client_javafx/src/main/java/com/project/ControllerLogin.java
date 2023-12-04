@@ -34,6 +34,7 @@ public class ControllerLogin {
             webSocketClient.connect();
             
             UtilsViews.setView("Game");
+            webSocketClient.setName(inputName.toString());
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
             // Maneja la excepción según tus necesidades
