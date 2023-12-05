@@ -45,6 +45,8 @@ class AppData with ChangeNotifier {
   List pressedCards = [];
   String winner = '';
 
+  var startingBoard;
+
   AppData() {
     _getLocalIpAddress();
   }
@@ -90,6 +92,8 @@ class AppData with ChangeNotifier {
             break;
 
           case "new_board":
+            var board = data['board'];
+            startingBoard = board;
             break;
 
           case "id":
@@ -253,7 +257,6 @@ class AppData with ChangeNotifier {
 
   void setUpCells() {
     if (!areTheCellsSet) {
-      List<int> colorIndices = generateColors(8);
       List<Color> colors = [
         Colors.blueAccent,
         Colors.green,
@@ -266,13 +269,18 @@ class AppData with ChangeNotifier {
       ];
 
       int index = 0;
-      for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-          memoryBoard[i][j][1] = colors[colorIndices[index]];
-          index++;
+      if (startingBoard != null) {
+        for (int i = 0; i < 4; i++) {
+          for (int j = 0; j < 4; j++) {
+            int codeColor = startingBoard[i][j];
+            print("i : ${i}  j : ${j}");
+            print(codeColor);
+            memoryBoard[i][j][1] = colors[codeColor];
+            index++;
+          }
         }
+        areTheCellsSet = true;
       }
-      areTheCellsSet = true;
     }
   }
 

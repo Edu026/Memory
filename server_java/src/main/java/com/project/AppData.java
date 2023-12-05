@@ -58,7 +58,8 @@ public class AppData {
         int index = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                matrix[i][j] = numbers.get(index++);
+                matrix[i][j] = numbers.get(index);
+                index++;
             }
         }
 
