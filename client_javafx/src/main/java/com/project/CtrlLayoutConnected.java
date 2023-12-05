@@ -65,8 +65,11 @@ public class CtrlLayoutConnected {
             int imageNumber = rowsList.get(row).get(col);  
             String imageName = "image" + imageNumber + ".png"; 
             imgs.get(i).setImage(new Image(getClass().getResource("/assets/" + imageName).toString())); 
-            imgs.get(i).setId(imageName);  // 
-            imgs.get(i).setOnMouseClicked(this::handleImageViewClick);  
+            imgs.get(i).setId(imageName);  //
+            if (appData.isMyTurn) {
+                imgs.get(i).setOnMouseClicked(this::handleImageViewClick);  
+            } 
+            
         }
     }
 
@@ -91,6 +94,7 @@ public class CtrlLayoutConnected {
             // Segundo clic, verifica si las imágenes coinciden
             if (doImagesMatch(firstClickedImageView, clickedImageView)) {
                 // Las imágenes coinciden, realiza las acciones necesarias
+                
                 handleMatchedImages(firstClickedImageView, clickedImageView);
             } else {
                 // Las imágenes no coinciden, realiza las acciones necesarias
@@ -102,6 +106,13 @@ public class CtrlLayoutConnected {
         }
     }
 
+    public void showImageAtPosition(int row, int col) {
+        int position = row * rowsList.get(0).size() + col;
+        ImageView targetImageView = imgs.get(position);
+        String imageName = "image" + rowsList.get(row).get(col) + ".png";
+        targetImageView.setImage(new Image(getClass().getResource("/assets/" + imageName).toString()));
+    }
+
     private boolean doImagesMatch(ImageView img1, ImageView img2) {
         // Comparar las imágenes por sus identificadores o cualquier otra lógica que prefieras
         return img1.getId().equals(img2.getId());
@@ -110,12 +121,19 @@ public class CtrlLayoutConnected {
     private void handleMatchedImages(ImageView img1, ImageView img2) {
         // Las imágenes coinciden, realiza las acciones necesarias
         // Puedes incrementar los puntos, ocultar las imágenes, etc.
-        System.out.println("¡Imágenes coinciden!");
+        appData.myPoints++;
+        pointsLabel1.setText(Integer.toString(appData.myPoints));
+       System.out.println("¡Imágenes coinciden!");
+
     }
 
     private void handleMismatchedImages(ImageView img1, ImageView img2) {
-        // Las imágenes no coinciden, realiza las acciones necesarias
-        // Puedes ocultar las imágenes, restablecer el juego, etc.
+         JSONObject objResponse = new JSONObject();
+        objResponse.put("type", "canvi_torn");
+        objResponse.put("points", appData.myPoints);
+        objResponse.put("destination", appData.rival_id);
+        appData.send(objResponse.toString());
+        
         System.out.println("¡Imágenes no coinciden!");
      }
     

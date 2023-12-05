@@ -4,6 +4,9 @@
     <groupId>com.example</groupId>
     <artifactId>project-name</artifactId>
     <version>1.0.0</version>
+    <properties>
+        <exec.mainClass>com.project.Main</exec.mainClass>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -79,7 +82,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.6.0</version>
                         <configuration>
-                            <mainClass>com.project.Main</mainClass>
+                            <mainClass>${exec.MainClass}</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

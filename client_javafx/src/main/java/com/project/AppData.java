@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import com.project.SocketsClient.OnCloseObject;
 
 import javafx.animation.PauseTransition;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.net.InetAddress;
@@ -30,10 +32,10 @@ public class AppData {
     private String ip = "localhost";
     private String port = "8888";
     private String name = "";
-    /*
-    private String rival_name = "";
-    private String rival_id = "";
-    */
+    
+    String rival_name = "";
+    String rival_id = "";
+    
     private ConnectionStatus connectionStatus = ConnectionStatus.DISCONNECTED;
 
     private String mySocketId;
@@ -59,18 +61,9 @@ public class AppData {
     // Array para mostrar si las imagenes son visible o no
     ArrayList<Boolean> imagesVisibility = new ArrayList<>(Collections.nCopies(16, false));
 
-    // Enter per saber quantes cartes has aixecat
-    int flippedCards = 0;
-
-    // Aquest ArrayList és l'índex en e GridLayout de les cartes que s'han mogut durant el torn
-    ArrayList<Integer> indexFlippedCards = new ArrayList<>();
-
-    // Enter per comparar si les 2 cartes són iguals
-    int previousCardValue = 0;
-
-
-
     
+   
+
     
     private AppData() {}
 
@@ -159,13 +152,24 @@ public class AppData {
         switch (type) {
             case "start_game":
                 System.out.println("Mi rival es " + data.getString("rival_name"));
-
+                rival_id=data.getString("rival_id");
+               
+                System.out.println("Comienza mi rival " + data.getString("isRivalFirst"));
+                isMyTurn=false;
                 break;
             case "new_board":
                 List<List<Integer>> bord=jsonArrayToList(data.getJSONArray("board"));
                 setBoard(bord);
             
                 break;
+            case "cards_flip":
+                showImageAtPosition(Integer.valueOf(data.getString("row")),Integer.valueOf(data.getString("row")));
+                break;
+            case "canvi_torn":
+                    isMyTurn=true;
+                    rivalPoints=Integer.valueOf(data.getString("points"));    
+                break;
+               
             case "list":
                 clients.clear();
                 data.getJSONArray("list").forEach(item -> clients.add(item.toString()));
@@ -275,6 +279,21 @@ public class AppData {
         message.put("value", msg);
         message.put("destination", selectedClient);
         socketClient.send(message.toString());
+    }
+    public void showImageAtPosition(int row, int col) {
+        int position = row * board.get(0).size() + col;
+        // Verifica si la posición está dentro de los límites
+        if (position >= 0 && position < imagesVisibility.size()) {
+            // Verifica si la imagen en esa posición aún no ha sido volteada
+            if (!imagesVisibility.get(position)) {
+                // Muestra la imagen en la posición especificada
+                imagesVisibility.set(position, true);
+
+                //  llamar a un método en el controlador de la interfaz gráfica
+                CtrlLayoutConnected ctrlConnected = (CtrlLayoutConnected) UtilsViews.getController("Connected");
+                ctrlConnected.showImageAtPosition(row, col);
+            }
+        }
     }
     
     public List<List<Integer>> Board() {

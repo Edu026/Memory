@@ -202,7 +202,7 @@ public class Server extends WebSocketServer {
     }
 
     public void handleNewPlayer(String clientId) {
-        // Si matchamaking nos devuelve array, se puede iniciar partida, enviamos json a jugadores
+        
         String[] NewGamePlayers = appData.emparejamiento(clientId);
         if (NewGamePlayers != null) {
             ArrayList<WebSocket> connections = new ArrayList<>();
