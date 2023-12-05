@@ -22,7 +22,8 @@ class AppData with ChangeNotifier {
   String port = "8888";
   String username = 'Player';
   int encert = 0;
-  String usernameRival = "";
+  String rival_name = "";
+  String rival_id = "";
   int encertsRival = 0;
 
   IOWebSocketChannel? _socketClient;
@@ -79,8 +80,23 @@ class AppData with ChangeNotifier {
           connectionStatus = ConnectionStatus.connected;
         }
 
+        print(data);
         switch (data['type']) {
+          case "start_game":
+            rival_name = data.getString("rival_name");
+            rival_id = data.getString("rival_id");
+            print("Mi rival es " + rival_name);
+            break;
 
+          case "id":
+            final msg = {
+              "type": "username",
+              "id": data.getString("value"),
+              "name": username
+            };
+            _socketClient!.sink.add(jsonEncode(message));
+
+            break;
         }
 
         notifyListeners();
@@ -305,8 +321,8 @@ class AppData with ChangeNotifier {
         broadcastMessage(username, 'winner');
         return username;
       } else if (encert < encertsRival) {
-        broadcastMessage(usernameRival, 'winner');
-        return usernameRival;
+        broadcastMessage(rival_name, 'winner');
+        return rival_name;
       } else if (encert == encertsRival) {
         broadcastMessage('empate', 'winner');
         return 'empate';
@@ -319,7 +335,7 @@ class AppData with ChangeNotifier {
     if (turno != username) {
       enEspera = username;
     } else {
-      enEspera = usernameRival;
+      enEspera = rival_name;
     }
   }
 }
