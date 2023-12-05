@@ -275,7 +275,7 @@ class AppData with ChangeNotifier {
             int codeColor = startingBoard[i][j];
             print("i : ${i}  j : ${j}");
             print(codeColor);
-            memoryBoard[i][j][1] = colors[codeColor];
+            memoryBoard[i][j][1] = colors[codeColor - 1];
             index++;
           }
         }
