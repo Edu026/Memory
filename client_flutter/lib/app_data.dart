@@ -90,11 +90,6 @@ class AppData with ChangeNotifier {
             break;
 
           case "new_board":
-            // Parse the JSON data into a map
-            Map<String, dynamic> data_map = data;
-            List<List<int>> board = data_map['board'];
-            print(board);
-
             break;
 
           case "id":
