@@ -83,18 +83,25 @@ class AppData with ChangeNotifier {
         print(data);
         switch (data['type']) {
           case "start_game":
-            rival_name = data.getString("rival_name");
-            rival_id = data.getString("rival_id");
+            rival_name = data["rival_name"];
+            rival_id = data["rival_id"];
             print("Mi rival es " + rival_name);
+            break;
+
+          case "new_board":
+            List<List<Int>> board = json.decode(data["board"]);
+            print(board);
+
             break;
 
           case "id":
             final msg = {
               "type": "username",
-              "id": data.getString("value"),
+              "id": data["value"],
               "name": username
             };
-            _socketClient!.sink.add(jsonEncode(message));
+            _socketClient!.sink.add(jsonEncode(msg));
+            print(jsonEncode(msg));
 
             break;
         }

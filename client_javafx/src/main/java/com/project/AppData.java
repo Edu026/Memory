@@ -149,6 +149,7 @@ public class AppData {
         }
 
         String type = data.getString("type");
+        System.out.println(data);
         switch (type) {
             case "start_game":
                 System.out.println("Mi rival es " + data.getString("rival_name"));
