@@ -51,20 +51,16 @@ public class AppData {
     // Boolean per saber si és el meu torn o no
     boolean isMyTurn = false;
     boolean isWinner = false;
-
+    boolean start = false;
     // Enter per saber els meus punts i els del meu rival
     int myPoints = 0;
     int rivalPoints = 0;
-    List<List<Integer>> board;
+    private List<List<Integer>> rowsList;
     ArrayList<List<Integer>> currentBoard = new ArrayList<>();
 
     // Array para mostrar si las imagenes son visible o no
     ArrayList<Boolean> imagesVisibility = new ArrayList<>(Collections.nCopies(16, false));
 
-    
-   
-
-    
     private AppData() {}
 
     public static AppData getInstance() {
@@ -139,6 +135,8 @@ public class AppData {
     private void onOpen (ServerHandshake handshake) {
         System.out.println("Handshake: " + handshake.getHttpStatusMessage());
         connectionStatus = ConnectionStatus.CONNECTED; 
+        
+        
     }
 
     private void onMessage(String message) {
@@ -155,20 +153,25 @@ public class AppData {
                 System.out.println("Mi rival es " + data.getString("rival_name"));
                 rival_id=data.getString("rival_id");
                
-                System.out.println("Comienza mi rival " + data.getString("isRivalFirst"));
                 isMyTurn=false;
                 break;
             case "new_board":
+                System.out.println("Board" + data.getJSONArray("board"));
                 List<List<Integer>> bord=jsonArrayToList(data.getJSONArray("board"));
-                setBoard(bord);
-            
+                setRowsList(bord);          
                 break;
             case "cards_flip":
                 showImageAtPosition(Integer.valueOf(data.getString("row")),Integer.valueOf(data.getString("row")));
                 break;
             case "canvi_torn":
-                    isMyTurn=true;
-                    rivalPoints=Integer.valueOf(data.getString("points"));    
+                isMyTurn=true;
+                rivalPoints=Integer.valueOf(data.getString("points"));    
+                break;
+            case "end_game":
+                data.getString("sender_points");
+                data.getString("rival_points");
+                rivalPoints=Integer.valueOf(data.getString("sender_points"));   
+                 
                 break;
                
             case "list":
@@ -282,7 +285,7 @@ public class AppData {
         socketClient.send(message.toString());
     }
     public void showImageAtPosition(int row, int col) {
-        int position = row * board.get(0).size() + col;
+        int position = row * rowsList.get(0).size() + col;
         // Verifica si la posición está dentro de los límites
         if (position >= 0 && position < imagesVisibility.size()) {
             // Verifica si la imagen en esa posición aún no ha sido volteada
@@ -337,7 +340,7 @@ public class AppData {
         for (int i = 0; i < rows; i++) {
             System.out.println(rowsList.get(i));
         }
-
+           
         // Retornem el taulell del joc
         return rowsList;
     }
@@ -393,10 +396,10 @@ public class AppData {
     public String getMySocketId () {
         return mySocketId;
     }
-    public List<List<Integer>>  setBoard(List<List<Integer>> board) {
-        return this.board = board;
+    public void setRowsList(List<List<Integer>> rowsList) {
+        this.rowsList = rowsList;
     }
-    public List<List<Integer>>  getBoard() {
-        return board;
+    public List<List<Integer>> getRowsList() {
+        return rowsList;
     }
 }
