@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 // ignore: depend_on_referenced_packages
@@ -89,7 +90,7 @@ class AppData with ChangeNotifier {
             break;
 
           case "new_board":
-            List<List<Int>> board = json.decode(data["board"]);
+            List<List<>> board = json.decode(data["board"]);
             print(board);
 
             break;
@@ -345,4 +346,6 @@ class AppData with ChangeNotifier {
       enEspera = rival_name;
     }
   }
+
+  
 }
